@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Clock</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="clock">
+        <div class="hour-ticks">
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+            <div class="tick"></div>
+        </div>
+        <div class="hour-hand"></div>
+        <div class="minute-hand"></div>
+        <div class="second-hand"></div>
+        <div class="center-circle"></div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        window.onload = () => {
+            ipcRenderer.send('get-time');
+            ipcRenderer.on('update-time', (event, time) => {
+                updateClock(time);
+            });
+        }
+
+        function updateClock() {
+                const now = new Date();
+                const hours = now.getHours() % 12 || 12;
+                const minutes = now.getMinutes();
+                const seconds = now.getSeconds();
+
+                const hourAngle = (hours % 12) * 30 + (minutes / 60) * 30;
+                const minuteAngle = minutes * 6;
+                const secondAngle = seconds * 6;
+
+                const hourHand = document.querySelector('.hour-hand');
+                const minuteHand = document.querySelector('.minute-hand');
+                const secondHand = document.querySelector('.second-hand');
+
+                hourHand.style.transform = `translateX(-50%) rotate(${hourAngle}deg)`;
+                minuteHand.style.transform = `translateX(-50%) rotate(${minuteAngle}deg)`;
+                secondHand.style.transform = `translateX(-50%) rotate(${secondAngle}deg)`;
+            }
+
+            setInterval(updateClock, 1000);
+    </script>
+</body>
+
+</html>
