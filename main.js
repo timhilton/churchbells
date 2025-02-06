@@ -51,7 +51,7 @@ function startBellScheduler() {
 }
 
 function playBellSound(type, count) {
-    let soundFile = type === "hourly" ? `bells-hour-${count}.mp3` : `audio/bells-quarter-${count}.mp3`;
+    let soundFile = type === "hourly" ? `audio/bells-hour-${count}.mp3` : `audio/bells-quarter-${count}.mp3`;
 
     function playChime() {
         player.play(path.join(__dirname, soundFile), (err) => {
